@@ -10,19 +10,24 @@ def test_input2():
 
 
 def test_input_file():
-    input_vals = inventory_management.read_input(test_input())
+    input_vals = inventory_management.read_input_file(test_input())
 
     assert input_vals is not None
 
-    input_vals = inventory_management.read_input(test_input2())
+    input_vals = inventory_management.read_input_file(test_input2())
 
     assert input_vals is not None
 
 
 def test_get_frequencies():
+
+    expected_num_of_twos = 1
+    expected_num_of_threes = 0
+
     twos, threes = inventory_management.get_frequencies(["aabcdef"])
-    assert twos == 1
-    assert threes == 0
+
+    assert twos == expected_num_of_twos
+    assert threes == expected_num_of_threes
 
     twos, threes = inventory_management.get_frequencies(["aaabcde"])
     assert twos == 0
@@ -42,7 +47,7 @@ def test_get_frequencies_dont_count_doubles():
 
 
 def test_get_frequencies_with_input():
-    input_lines = inventory_management.read_input(test_input())
+    input_lines = inventory_management.read_input_file(test_input())
     twos, threes = inventory_management.get_frequencies(input_lines)
 
     assert twos == 4

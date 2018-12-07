@@ -2,7 +2,7 @@ import collections
 import os
 
 
-def read_input(file_path):
+def read_input_file(file_path):
     """Read in a text file containing post-fix integers."""
 
     input_values = []
@@ -40,25 +40,39 @@ def get_frequencies(input_list):
 
 
 def get_checksum(file_path):
-    input_list = read_input(input_file(file_path))
+    input_list = read_input_file(input_file(file_path))
     twos, threes = get_frequencies(input_list)
 
     return twos * threes
 
 
-def duplicated_split(input_list, removal_index):
-    pass
+def duplicated_split(line, removal_index):
+    if removal_index == len(line) - 1:
+        return line
+    elif removal_index < 0 or removal_index >= len(line):
+        raise IndexError("You are out of the range of the input line.")
+
+    return line[:removal_index], line[removal_index + 1 :]  # noqa
 
 
 def get_samesies(file_path):
-    input_list = read_input(input_file(file_path))
+    input_list = read_input_file(input_file(file_path))
     max_removal_index = len(input_list[0]) - 1
     removal_index = 0
 
-    leftside = None
-    while leftside is None and max_removal_index >= removal_index:
-        leftside, rightside = duplicated_split(input_list, removal_index)
+    while max_removal_index >= removal_index:
+        newlist = []
+        for line in input_list:
+            leftside, rightside = duplicated_split(line, removal_index)
+            newlist.append(leftside + rightside)
+        counter = collections.Counter(newlist)
+        for box_label, count in counter.items():
+            if count == 2:
+                return box_label
+
         removal_index += 1
+
+    return "NO SOLUTION TRY AGAIN"
 
 
 if __name__ == "__main__":
